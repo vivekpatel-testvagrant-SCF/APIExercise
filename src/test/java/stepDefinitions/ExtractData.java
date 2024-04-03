@@ -13,8 +13,7 @@ import org.testng.Assert;
 
 import java.io.File;
 
-import static constants.API_Endpoints.EXCHANGE_GET_BASE_URI;
-import static constants.API_Endpoints.GET_SUCCESS_CODE;
+import static constants.ExchangeAPIConstants.*;
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
 
@@ -50,7 +49,7 @@ public class ExtractData {
     @Then("Response time is less than {int} seconds")
     public void response_time_less_than_3_second(int expectedresponseTime){
         int responseTime = (int)exchangeRateResponse.getTimeLastUpdateUnix();
-        long currentTime = System.currentTimeMillis() / 1000;
+        long currentTime = System.currentTimeMillis() / MILLIS_IN_SECS_DIVIDER;
         Assert.assertTrue(currentTime - responseTime >= expectedresponseTime);
     }
 
