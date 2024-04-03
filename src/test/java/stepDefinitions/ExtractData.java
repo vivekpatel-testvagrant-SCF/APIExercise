@@ -5,10 +5,13 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.module.jsv.JsonSchemaValidator;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import models.ExchangeRateResponse;
 import org.testng.Assert;
+
+import java.io.File;
 
 import static constants.API_Endpoints.EXCHANGE_GET_BASE_URI;
 import static constants.API_Endpoints.GET_SUCCESS_CODE;
@@ -60,6 +63,11 @@ public class ExtractData {
     public void i_receive_the_price_against_the_AED_on_range(double min,double max) {
         double usdToAedRate = exchangeRateResponse.getRatesResponseBody().getAED();
         Assert.assertTrue(usdToAedRate >= min && usdToAedRate <= max);
+    }
 
+    @Then("Json schema matches API response with endpoint {string}")
+    public void json_schema(String endpoint)
+    {
+        httpRequest.contentType(ContentType.JSON).get(endpoint).then().assertThat().body(JsonSchemaValidator.matchesJsonSchema(new File("/Users/testvagrant/IdeaProjects/untitled2/src/test/resources/data/jsonSchema.json")));
     }
 }
